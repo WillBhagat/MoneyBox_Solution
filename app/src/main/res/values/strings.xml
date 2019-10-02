@@ -11,4 +11,11 @@
     <string name="password_error">Please enter a correct password</string>
     <string name="full_name_error">Please enter your full name</string>
     <string name="input_valid">Input is valid!</string>
+    <string name="input_invalid">Input is invalid!</string>
+    <string name="plan_value">Total Plan Value: £%1$s</string>
+    <string name="name">Hello %1$s! </string>
+    <string name="button_multiline_individual">Plan Value: £%1$s \nMoneybox: £%2$s</string>
+    <string name="button_multiline">%1$s\nPlan Value: £%2$s \nMoneybox: £%3$s</string>
+    <string name="add_20">Add £20</string>
+    <string name="logo">Logo</string>
 </resources>
