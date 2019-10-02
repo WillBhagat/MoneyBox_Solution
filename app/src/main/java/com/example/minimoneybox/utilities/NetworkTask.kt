@@ -33,8 +33,10 @@ class NetworkTask {
             RequestMethod.GET -> request.get()
             RequestMethod.POST -> {
                 val mediaType = "application/x-www-form-urlencoded".toMediaType()
-                val body = networkInfo.bodyInfo!!.toRequestBody(mediaType)
-                request.post(body)
+                if(networkInfo.body != null) {
+                    val body = networkInfo.bodyInfo.toRequestBody(mediaType)
+                    request.post(body)
+                }
             }
         }
 
