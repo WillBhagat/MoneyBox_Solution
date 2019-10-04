@@ -1,141 +1,53 @@
-# The Brief:
+# Readme
 
-Create a mini version of the Moneybox app that will allow existing users to login, check their account and add money to their moneybox.
+For this task, I had two objectives: to learn how to use Kotlin and to write robust, future proof code.
 
-## Part A - Fix current bugs
+## Part A
+This section will provide an overview on how the first set of tasks were solved.
 
-In this repository you will find LoginActivity that allows users to enter their username, password and optionally their name.  We have implemented a basic screen for you that validates username, password and name against simple regular expressions but makes no calls to the API.
+### Layout
+Changing the layout was a matter of working with the constraint layout and assigning constraints correctly between the views. 
 
-Unfortunately this screen has 3 bugs raised by our testers that they want you to fix and are listed below.  If you are struggling to fix any of these bugs, please give it your best attempt and then move onto the next bug or task.
+### Validation
+To complete the validation task meant simply editing some of the boolean logic already existing in the class. I created a couple of variables to store memory of whether an input was valid. This then means that if two values were incorrect, two error messages will be displayed accordingly, rather than for just the first error encountered. 
 
-### Bug 1 - Layout does not look as expected
+### Animation
+The animation was solved by studying the Lottie read me. By setting the max frame to the end of the first animation section, I was able to check that the first section was completed by returning a double using the animatedFraction method from Lottie. Then I could simply set the new max and min frames and set the repeat count to infinite. 
 
-Please re-arrange the views in the LoginActivity to match the expected layout.
 
-![](/images/correct_layout.png)
+## Part B
+This section will explore the issues and factors that make up the solution to the second part of the task.
 
-### Bug 2 - Validation is incorrect
-If the input entered by the user is correct then they should see a toast saying “Input is valid!”.  However if it is not correct we should show an error on the field that is incorrect.  Below is the following validation logic:
+### Design
+To make a coherent application I attempted to use a consistent theme throughout, basing this off the design of the first screen. Therefore, I reused the ‘moneybox’ throughout all of the screens. Similarly, I used the button in the drawable section for each button in the project. I also created a file in the drawable section entitled ‘divider’ to create consistent spacing between elements throughout all of the screens. 
 
-- Email is not optional and should match EMAIL_REGEX
-- Password is not optional and should match PASSWORD_REGEX
-- Name is optional, but if it contains any value it should match NAME_REGEX
+### Network requests
+Very quickly I had code written down that would make the requests and return a body of data. I used the programme ‘Postman’ to quickly test the responses to my inputted request headers without having to write code. I then translated this into Kotlin code and used gson to pass the results into an object. However, there was a couple of issues with the code that needed fixing.
 
-There is some validation logic in LoginActivity, but it is currently incorrect. Please implement this feature to match this logic.
+Firstly, the code was duplicated for each screen and request. An AsyncTask was initially used to make HTTP requests for each class. The first step was to create a NetworkTask class which would handle all of the HTTP requests. Default headers were used and specific data for each request was passed in. The problem came when trying to pass the results back to the class that made the request. The conventional way is to override the method onPostExecute() in the AsyncTask class. However, I would have to pass in the class that called the class, and this seemed a little clumsy. Further to this, during my research I read about coroutines. This seemed like a good solution to the problem as I could return a value directly, and it seemed like an interesting new area for me to explore. See reference no. 1 below for the video I used to learn from. I used the withContext method because I wanted the app to be blocked until the result of the network task be completed. This is needed, for example, because the login information provided by the user has to be validated by a network request before a new intent can be started.
 
-### Bug 3 - Animation is looping incorrectly
+The result was processed by creating classes in each individual class that made a request. The processing was done using gson (reference no.2) to make the response into an object which I could then access easily. 
 
-Above the login button is an animation of an owl and a pig.  We would like this animation to play every time the user starts the activity and then loop indefinitely.  The logic for this animation should be as follows:
+Secondly, I wanted the code to be future proof, so that it could easily be extended if more functionality was to be added. Therefore, if additional requests need to be added, the code caters for this. The RequestMethod enum simply needs to be extended to allow for additional HTTP request types. 
 
-- The animation should start from frame **0** to **109** when the user first starts the activity.  See below for animation.
-![](/images/firstpig.gif)
-- When the first stage of the animation has finished it should then loop from frame **131** to **158** continuously.  See below for animation.<br/>
-![](/images/secondpig.gif)
+### Structure of data classes
+A transaction data class was employed. The transaction data class contains a number of other data classes (accountInfo, networkInfo and loginInfo) so that data can be passed between screens in a clean way, rather than passing them individually. On the creation of a new screen, data is retrieved from this class and stored in local variables to be used and manipulated as it wishes. Then, before creating a new screen, the data is then wrapped up in transaction data to be passed on. As I have some experience as an ASP .Net developer, this life-cycle for a page format is something I feel comfortable working with. See reference no.3 for details on a page life-cycle.
 
-To create animation in our app we use a helpful library called Lottie.  This has been added to the project for you, but currently it just plays the animation once and then stops.  Please implement the logic as described above.
+## Evaluation of objectives
+### Learning Kotlin
+Having previously written apps in Java before, I wanted to experiment with something new. During general research, I’ve read that Kotlin is highly regarded and some people see it as the future of app design, and therefore this seemed like a good opportunity to expand my skill set. 
 
-There is lots of helpful documentation on Lottie [here](http://airbnb.io/lottie/#/android).  Please take a look at this page for information on how to loop the animation, play from a min and max frame and detect when an animation ends.
+One of the main advantages I found working with Kotlin is the reduction of boiler-plate code for certain tasks. Namely, when using parcelable objects to store data, Kotlin has a handy ‘@Parcelize’ feature. In java, there is a lot of code needed to make an object parcelable, however Kotlin makes it very simple. This is only one example of how Kotlin helped me with the app. Initially I thought that Kotlin would hinder my project, and although it did mean it took longer to complete, there were aspects to it that actually made the project more manageable. I look forward to working with Kotlin in the future and learning more about it. 
 
-## Part B - Add 2 new screens
+### Future proof code 
+One aspect that makes the code future proof is the introduction of the class ‘TransactionData’. Inside this class contains other data classes that are used to transport data across the different screens. This was designed with the future additions in mind as to add a new data class, TransactionData just needs to be updated with the new data class. The benefit of this is that the code does inside the screens does not have to be updated significantly when adding extra data classes.  
 
-We now want to give some useful functionality to our users. To allow them to log into the app, view and edit their account using our sandbox API.
+## Conclusion
+Overall, I found this to be a very good exercise to learn Kotlin and a little bit more about app design. The two objectives I set for myself were, in my opinion, met. Looking forward, implementing some unit testing would be beneficial to the project as well as generally improving and gaining experience with Kotlin
 
-### Screen 2 - User accounts screen
-This screen should be shown after the user has successfully logged in and should show have the following functionality:
-- Display "Hello {name} **only** if they provided it on previous screen"
-- Show the **'TotalPlanValue'** of a user.
-- Show the accounts the user holds, e.g. ISA, GIA, LISA, Pension.
-- Show all of those account's **'PlanValue'**.
-- Shhow all of those account's **'Moneybox'** total.
+References:
+https://www.youtube.com/watch?v=jYuK1qzFrJg
+https://github.com/google/gson
+https://docs.microsoft.com/en-us/previous-versions/aspnet/ms178472(v=vs.100)?redirectedfrom=MSDN
+https://square.github.io/okhttp/
 
-### Screen 3 - Individual account screen
-If a user selects one of those accounts, they should then be taken to this screen.  This screen should have the following functionality:
-- Show the **'Name'** of the account.
-- Show the account's **'PlanValue'**.
-- Show the accounts **'Moneybox'** total.
-- Allow a user to add to a fixed value (e.g. £10) to their moneybox total.
-
-A prototype wireframe of all 3 screens is provided as a guideline. You are free to change any elements of the screen and provide additional information if you wish.
-
-![](/images/wireframe.png)
-
-## What we are looking for:
- - An android application written in either Java or Kotlin.
- - Demonstration of coding style and design patterns.
- - Knowledge of common android libraries and any others that you find useful.
- - Storage of data between screens.
- - Consistency of data between screens.
- - Error handling.
- - Any form of unit or integration testing you see fit.
- - The application must run on Android 5.0 and above.
- - The application must compile and run in Android Studio.
-
-Please feel free to refactor the LoginActivity and use any libraries/helper methods to make your life easier.
-
-## How to Submit your solution:
- - Clone this repository
- - Create a public repo in github, bitbucket or a suitable alternative and provide a link to the repository.
- - Provide a readme in markdown which details how you solved the bugs in part A, and explains the structure of your solution in Part B and any libraries that you may have used.
-
-## API Usage
-This a brief summary of the api endpoints in the moneybox sandbox environment. There a lot of other additional properties from the json responses that are not relevant, but you must use these endpoints to retrieve the information needed for this application.
-
-#### Base URL & Test User
-The base URL for the moneybox sandbox environment is `https://api-test01.moneyboxapp.com/`.
-You can log into test your app using the following user:
-
-|  Username          | Password         |
-| ------------- | ------------- |
-| androidtest@moneyboxapp.com  | P455word12  |
-
-#### Headers
-
-In order to make requests https must be used and the following headers must be included in each request.
-
-|  Key | Value |
-| ------------- | ------------- |
-| AppId  | 3a97b932a9d449c981b595  |
-| Content-Type  | application/json  |
-| appVersion | 5.10.0 |
-| apiVersion | 3.0.0 |
-
-#### Authentication
-To login with this user to retrieve a bearer token you need to call `POST /users/login`.
-```
-POST /users/login
-{
-  "Email": "androidtest@moneyboxapp.com",
-  "Password": "P455word12",
-  "Idfa": "ANYTHING"
-}
-```
-Sample json response
-```
-"Session": {
-        "BearerToken": "TsMWRkbrcu3NGrpf84gi2+pg0iOMVymyKklmkY0oI84=",
-        "ExternalSessionId": "4ff0eab7-7d3f-40c5-b87b-68d4a4961983", -- not used
-        "SessionExternalId": "4ff0eab7-7d3f-40c5-b87b-68d4a4961983", -- not used
-        "ExpiryInSeconds": 0 -- not used
-    }
-```
-After obtaining a bearer token an Authorization header must be provided for all other endpoints along with the headers listed above (Note: The BearerToken has a sliding expiration of 5 mins).
-
-|  Key          | Value         |
-| ------------- | ------------- |
-| Authorization  | Bearer TsMWRkbrcu3NGrpf84gi2+pg0iOMVymyKklmkY0oI84=  |
-
-#### Investor Products
-Provides product and account information for a user that will be needed for the two additional screens.
-```
-GET /investorproducts
-```
-### One off payments
-Adds a one off amount to the users moneybox.
-```
-POST /oneoffpayments
-{
-  "Amount": 20,
-  "InvestorProductId": 3230 ------> The InvestorProductId from /investorproducts endpoint
-}
-```
-Good luck!
