@@ -5,13 +5,13 @@ For this task, I had two objectives: to learn how to use Kotlin and to write rob
 ## Part A
 This section will provide an overview on how the first set of tasks were solved.
 
-### Layout
+Layout
 Changing the layout was a matter of working with the constraint layout and assigning constraints correctly between the views. 
 
-### Validation
+Validation
 To complete the validation task meant simply editing some of the boolean logic already existing in the class. I created a couple of variables to store memory of whether an input was valid. This then means that if two values were incorrect, two error messages will be displayed accordingly, rather than for just the first error encountered. 
 
-### Animation
+Animation
 The animation was solved by studying the Lottie read me. By setting the max frame to the end of the first animation section, I was able to check that the first section was completed by returning a double using the animatedFraction method from Lottie. Then I could simply set the new max and min frames and set the repeat count to infinite. 
 
 
